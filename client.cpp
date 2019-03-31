@@ -2,16 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
 using namespace std; 
 extern int errno;
+
+int printError(const char * errTitle) {
+  char * pszErrorString = strerror(errno);
+  cout<<"Eror "<<errTitle<<":"<<pszErrorString<<endl;
+}
+
 int main(int argc, char *argv[]){
   if(argc < 3) {
     cout<<"command line arguments needed for client to connect to server {ip} {port}."<<endl;
-    cout<<"example:./client 127.0.0.1 1099"<<endl;
+    cout<<"example:./client 127.0.0.1 10999"<<endl;
     return 1;
   }
   //ipv6 maximum plus null terminator
@@ -21,7 +28,7 @@ int main(int argc, char *argv[]){
   int nPort = atoi(argv[2]);
   unsigned short maxPort = 0xFFFF;
   if(nPort > maxPort) {
-    cout<<"Port:"<<nPort<<" is larget than maximum allowed "<<maxPort<<"."<<endl;
+    cout<<"Port:"<<nPort<<" is larger than maximum allowed "<<maxPort<<"."<<endl;
     return 2;
   }
   unsigned short port = nPort;
@@ -49,14 +56,19 @@ int main(int argc, char *argv[]){
   if (nCode == 0 ) {
     char buffer[1024];
     /*---- Read the message from the server into the buffer ----*/
-    recv(clientSocket, buffer, 1024, 0);
+    int nRead = recv(clientSocket, buffer, 1024, 0);
 
-    /*---- Print the received message ----*/
-    printf("Data received: %s",buffer);   
-
+    if(nRead >= 0) {
+      close(clientSocket);
+      /*---- Print the received message ----*/
+      cout<<"Data received: "<<buffer<<endl;
+    } else {
+      printError("receiving");
+      close(clientSocket);
+    }
     return 0;
   } else {
-       char * pszErrorString = strerror(errno);
-       cout<<"Eror Connecting:"<<pszErrorString<<endl;
+      printError("Connecting");
+      return 3;
   }
 }
