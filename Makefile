@@ -1,6 +1,4 @@
-all:
-	g++ server.cpp -o server
-	g++ client.cpp -o client
+all: server client
 server:
 	g++ server.cpp -o server
 client:
