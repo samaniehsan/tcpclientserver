@@ -8,7 +8,8 @@
 
 using namespace std; 
 
-int main(){
+int main(int argc, char *argv[]){
+
   int welcomeSocket, newSocket;
   char buffer[1024];
   struct sockaddr_in serverAddr;
