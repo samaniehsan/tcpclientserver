@@ -7,13 +7,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-using namespace std; 
-extern int errno;
+#include "common.h"
 
-int printError(const char * errTitle) {
-  char * pszErrorString = strerror(errno);
-  cout<<"Eror "<<errTitle<<":"<<pszErrorString<<endl;
-}
+using namespace std;
 
 int main(int argc, char *argv[]){
   if(argc < 3) {
@@ -54,6 +50,19 @@ int main(int argc, char *argv[]){
   socklen_t addr_size = sizeof serverAddr;
   int nCode = connect(clientSocket, (struct sockaddr *) &serverAddr, addr_size);
   if (nCode == 0 ) {
+    Student students[10] = {
+      {100000,"John","Smith",10},
+      {100001,"Jane","Moore",20},
+      {100002,"Alex","Holland",30},
+      {100003,"Alex","Bear",40},
+      {100004,"Cody","White",50},
+      {100005,"Kyle","Black",60},
+      {100006,"Shannon","O'Reilly",70},
+      {100007,"Tim","Duncan",80},
+      {100008,"Manu","Ginobili",90},
+      {100009,"Tony","Parker",100}     
+    };
+
     char buffer[1024];
     /*---- Read the message from the server into the buffer ----*/
     int nRead = recv(clientSocket, buffer, 1024, 0);
@@ -63,12 +72,12 @@ int main(int argc, char *argv[]){
       /*---- Print the received message ----*/
       cout<<"Data received: "<<buffer<<endl;
     } else {
-      printError("receiving");
+      SocketHelper::printError("receiving");
       close(clientSocket);
     }
     return 0;
   } else {
-      printError("Connecting");
+      SocketHelper::printError("Connecting");
       return 3;
   }
 }
