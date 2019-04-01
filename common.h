@@ -1,7 +1,4 @@
 
-
-
-
 #ifndef BYTE
 typedef char BYTE;
 #endif
