@@ -1,6 +1,6 @@
 all: server client
 server:
-	g++ server.cpp common.cpp -o server
+	g++ server.cpp common.cpp serverchannel.cpp -o server
 client:
 	g++ client.cpp common.cpp clientchannel.cpp -o client
 clean:

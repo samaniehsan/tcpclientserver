@@ -24,7 +24,7 @@ enum Action_Code {
 
 typedef struct {
     BYTE code;
-} RequestBody;
+} RequestHeader;
 
 typedef struct {
   unsigned int studentId;
