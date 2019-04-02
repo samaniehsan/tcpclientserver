@@ -9,8 +9,8 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   if(argc < 3) {
-    cout<<"command line arguments needed for client to connect to server {ip} {port}."<<endl;
-    cout<<"example:./client 127.0.0.1 10999"<<endl;
+    cerr<<"command line arguments needed for client to connect to server {ip} {port}."<<endl;
+    cerr<<"example:./client 127.0.0.1 10999"<<endl;
     return 1;
   }
   //ipv6 maximum plus null terminator
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
   int nPort = atoi(argv[2]);
   unsigned short maxPort = 0xFFFF;
   if(nPort > maxPort) {
-    cout<<"Port:"<<nPort<<" is larger than maximum allowed "<<maxPort<<"."<<endl;
+    cerr<<"Port:"<<nPort<<" is larger than maximum allowed "<<maxPort<<"."<<endl;
     return 2;
   }
   

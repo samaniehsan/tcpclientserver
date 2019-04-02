@@ -46,8 +46,10 @@ bool ClientChannel::getStudents(const Action_Code desiredActionCode,vector<Stude
   for(i = 0; i < nCount; i++ ) {
     Student student;
     if(!SocketHelper::receiveStudentInfo(clientSocket, student)) {
-      studentList.push_back(student);
+      std::cerr<<"cannot receive student:"<<i+1<<"of"<<nCount<<endl;
+      return false;
     }
+    studentList.push_back(student);
   }
   return true;
 }
@@ -55,8 +57,13 @@ bool ClientChannel::getStudents(const Action_Code desiredActionCode,vector<Stude
 void ClientChannel::printStudents(const vector<Student>& studentList) {
   cout<<"****students****"<<endl;
   for (std::vector<Student>::const_iterator it=studentList.begin(); it!=studentList.end(); it++) {
-    cout<<"****students****"<<endl;
-    cout<<"****----------****"<<endl;
+    cout
+    <<"id:"<<it->studentId
+    <<" firstName:"<<
+    it->firstName
+    <<" lastName:"<<it->lastName
+    <<" score:"<<(int)it->score<<
+    endl;
   }
   cout<<"****----------****"<<endl;
 }
@@ -176,37 +183,51 @@ int ClientChannel::run(
     SocketHelper::printError("Connecting");
     return 3;
   }  
+  cout<<"adding students"<<endl;
   if(!addStudents()) {
     std::cerr<<"AddStudents Failed"<<endl;
     return 4;
   }
 
+  cout<<"display allstudents"<<endl;
   if(!displayAllStudents()) { 
     std::cerr<<"displayAllStudents Failed"<<endl;
     return 5;
   }
+
+  cout<<"display students by score"<<endl;
   if(!displayStudentsByScore(0)) {
     std::cerr<<"displayStudentsByScore Failed"<<endl;
     return 6;
   }
-    if(!displayStudentsById(100000)) {
+  
+  cout<<"display students by id"<<endl;
+  if(!displayStudentsById(100000)) {
     std::cerr<<"displayStudentsById Failed"<<endl;
     return 7;
   }
+
+  cout<<"delete student by id"<<endl;
   if(!deleteStudentById(100000)) {
     std::cerr<<"deleteStudentByID Failed"<<endl;
     return 8;
   }
+  
+  cout<<"display all students"<<endl;
   if(!displayAllStudents()) {
     std::cerr<<"displayAllStudents_2 Failed"<<endl;
     return 8;
   }
+  
+  cout<<"display all students"<<endl;
   if(!displayStudentsByScore(0)) {
     std::cerr<<"displayStudentsByScore_2 Failed"<<endl;
     return 9;
   }
-  if(!displayStudentsByScore(0)) {
-    std::cerr<<"displayStudentsByScore_2 Failed"<<endl;
+
+  cout<<"display all students with score above 0"<<endl;
+  if(!displayStudentsById(1000000)) {
+    std::cerr<<"displayStudentsById_2 Failed"<<endl;
     return 10;
   }
   cout<<"$$$$$$$$$$ Success; Exiting! $$$$$$$$$$$"<<endl;

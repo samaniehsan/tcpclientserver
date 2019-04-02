@@ -105,8 +105,9 @@ bool SocketHelper::sendStudentsByStudentIdRequest(int socket,const unsigned int 
 
 bool SocketHelper::receiveActionCode(int socket, Action_Code& actionCode) {
     RequestHeader header = {0};
-    int nCode = recv(socket,&header,sizeof(RequestHeader),0);
-    if(nCode != -1) {
+    int errorCode = recv(socket,&header,sizeof(RequestHeader),0);
+    cout<<"receiveActionCode errorCode:"<<errorCode<<" actionCode:"<<(int)header.code<<endl;
+    if(errorCode != -1) {
         actionCode = (Action_Code)header.code;
         if(actionCode > 0 ) {
             return true;
@@ -121,6 +122,7 @@ bool SocketHelper::receiveStudentsCount(int socket, int & nCount) {
     int n = 0;
     int nCode = recv(socket,&n,sizeof(int),0);
     if(nCode != -1) {
+        cout<<"receieved Students Count:"<<n<<endl;
         nCount = n;
         return true;
     }
@@ -131,6 +133,7 @@ bool SocketHelper::receiveStudentsCount(int socket, int & nCount) {
 bool SocketHelper::receiveStudentInfo(int socket,Student & student) {
     int nCode = recv(socket,&student,sizeof(Student),0);
     if(nCode != -1) {
+        cout<<"student.id"<<student.studentId<<endl;
         return true;
     }
     SocketHelper::printError("receiveStudentInfo");
