@@ -25,7 +25,8 @@ SocketHelper::addStudent(
   const char * firstName,
   const char * lastName,
   BYTE score) {
-    RequestHeader header = {Action_Code_Display_Add};
+    cout<<"sending student:"<<studentId<<endl;
+    RequestHeader header = {.code=Action_Code_Display_Add};
     int nCode = send(socket,&header,sizeof(RequestHeader),0);
     if(nCode != -1) {
         Student student;
@@ -47,7 +48,8 @@ SocketHelper::addStudent(
 
 
 bool SocketHelper::deleteStudent(int socket,  unsigned int studentId) {
-    RequestHeader header = {Action_Code_Display_Delete};
+    cout<<"sending delete student:"<<studentId<<endl;
+    RequestHeader header = {.code=Action_Code_Display_Delete};
     int nCode = send(socket,&header,sizeof(RequestHeader),0);
     if(nCode != -1) {
         StudentRequest student = {studentId};
@@ -65,7 +67,8 @@ bool SocketHelper::deleteStudent(int socket,  unsigned int studentId) {
 
 bool
 SocketHelper::sendAllStudentsRequest(int socket) {
-    RequestHeader header = {Action_Code_Display_All};
+    cout<<"sending display all students"<<endl;
+    RequestHeader header = {.code=Action_Code_Display_All};
     int nCode = send(socket,&header,sizeof(RequestHeader),0);
     if(nCode != -1) {
         return true;
@@ -75,10 +78,11 @@ SocketHelper::sendAllStudentsRequest(int socket) {
 }
 
 bool SocketHelper::sendStudentsByScoreRequest(int socket, BYTE score) {
-    RequestHeader header = {Action_Code_Display_Score};
+    cout<<"sending display all students above score:"<<score<<endl;
+    RequestHeader header = {.code=Action_Code_Display_Score};
     int nCode = send(socket,&header,sizeof(RequestHeader),0);
     if(nCode != -1) {
-        ScoreRequest request = {score};
+        ScoreRequest request = {.score=score};
         nCode = send(socket,&request,sizeof(ScoreRequest),0);
         if(nCode != -1) {
             return true;
@@ -89,7 +93,8 @@ bool SocketHelper::sendStudentsByScoreRequest(int socket, BYTE score) {
 }
 
 bool SocketHelper::sendStudentsByStudentIdRequest(int socket,const unsigned int studentId) {
-    RequestHeader header = {Action_Code_Display_Id};
+    cout<<"sending display student with id:"<<studentId<<endl;
+    RequestHeader header = {.code=Action_Code_Display_Id};
     int nCode = send(socket,&header,sizeof(RequestHeader),0);
     if(nCode != -1) {
         StudentRequest request = {.studentId=studentId};
@@ -109,10 +114,11 @@ bool SocketHelper::receiveActionCode(int socket, Action_Code& actionCode) {
     cout<<"receiveActionCode errorCode:"<<errorCode<<" actionCode:"<<(int)header.code<<endl;
     if(errorCode != -1) {
         actionCode = (Action_Code)header.code;
-        if(actionCode > 0 ) {
+        if(actionCode >= Action_Code_Display_All ) {
             return true;
         }
         std::cerr<<"wrong action code:"<<actionCode<<endl;
+        return false;
     }
     SocketHelper::printError("receiveActionCode");
     return false;
@@ -132,6 +138,7 @@ bool SocketHelper::receiveStudentsCount(int socket, int & nCount) {
 
 bool SocketHelper::receiveStudentInfo(int socket,Student & student) {
     int nCode = recv(socket,&student,sizeof(Student),0);
+    cout<<"received "<<nCode<<" bytes."<<endl;
     if(nCode != -1) {
         cout<<"student.id"<<student.studentId<<endl;
         return true;
@@ -139,31 +146,3 @@ bool SocketHelper::receiveStudentInfo(int socket,Student & student) {
     SocketHelper::printError("receiveStudentInfo");
     return false;
 }
-
-/*
-StudentRequest::StudentRequest() {
-    studentId = 0;
-}
-
-StudentRequest::StudentRequest(unsigned int studentId) {
-    this.studentId = studentId;
-}
-
-Student::Student() {
-    studentId = 0;
-    score = 0;
-    memset(&firstName,0,11);
-    memset(&firstName,0,11);
-}
-
-Student::Student(
-    unsigned int studentId,
-    const char * Fname,
-    const char * Lname,
-    BYTE score) {
-    this.studentId = studentId;
-    strncpy(this.firstName,firstName,11);
-    strncpy(this.lastName,lastName,11);
-    this.score = score;
-}
-*/

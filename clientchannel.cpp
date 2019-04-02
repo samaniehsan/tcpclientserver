@@ -207,7 +207,7 @@ int ClientChannel::run(
     return 7;
   }
 
-  cout<<"delete student by id"<<endl;
+  cout<<"delete student by id:100,000"<<endl;
   if(!deleteStudentById(100000)) {
     std::cerr<<"deleteStudentByID Failed"<<endl;
     return 8;
@@ -216,19 +216,13 @@ int ClientChannel::run(
   cout<<"display all students"<<endl;
   if(!displayAllStudents()) {
     std::cerr<<"displayAllStudents_2 Failed"<<endl;
-    return 8;
-  }
-  
-  cout<<"display all students"<<endl;
-  if(!displayStudentsByScore(0)) {
-    std::cerr<<"displayStudentsByScore_2 Failed"<<endl;
     return 9;
   }
 
-  cout<<"display all students with score above 0"<<endl;
-  if(!displayStudentsById(1000000)) {
-    std::cerr<<"displayStudentsById_2 Failed"<<endl;
-    return 10;
+  int errorCode = shutdown(clientSocket, 0);
+  if(errorCode == -1) {
+    SocketHelper::printError("shutdown");
+    return errorCode;
   }
   cout<<"$$$$$$$$$$ Success; Exiting! $$$$$$$$$$$"<<endl;
   return 0;

@@ -83,7 +83,7 @@ int ServerChannel::receive() {
         for(;;) {
           RequestHeader header = {0};
           int errorCode = recv(clientSocket, &header, sizeof(RequestHeader), 0);
-          cout<<"data received"<<endl;
+          cout<<"data received. errorCode:"<<errorCode<<" header code:"<<(int)header.code<<endl;
 
           if(errorCode == -1) {
             SocketHelper::printError("receiving");
