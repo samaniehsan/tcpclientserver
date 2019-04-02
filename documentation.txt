@@ -1,4 +1,13 @@
 Student: SAMANI, EHSAN
+
+how to build: just run make
+make
+
+build client: make client
+
+build server: make server
+
+---
 how to run server (port 39999)
 ./server 39999
 
