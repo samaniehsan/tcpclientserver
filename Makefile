@@ -1,4 +1,4 @@
-all: server client
+all: clean server client
 server:
 	g++ server.cpp common.cpp serverchannel.cpp -o server
 client:

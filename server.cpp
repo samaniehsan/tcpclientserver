@@ -18,6 +18,7 @@ int main(int argc, char *argv[]){
     return 1;
   }
   int nPort = atoi(argv[1]);
+  unsigned short int maxPort = 0xFFFF;
   if(nPort > maxPort) {
     cout<<"Port:"<<nPort<<" is larger than maximum allowed "<<maxPort<<"."<<endl;
     return 2;

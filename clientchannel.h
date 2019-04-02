@@ -1,22 +1,33 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <vector>
+#include "common.h"
+
+using namespace std;
 
 class ClientChannel {
 public:
     ClientChannel(const char * szAddr, const unsigned short port);
     ~ClientChannel();
-
-    bool addStudents(int clientSocket);
+    int run();
+private:
+    bool addStudents();
     int run(
     int clientSocket,
     const sockaddr_in& serverAddr
     );
+
     void initServerAddress(
     const char * szAddr,
     const unsigned short int port
     );
-    int run();
+    bool deleteStudentById(int studentId);
+    bool getStudents(const Action_Code desiredActionCode,vector<Student>& studentList);
+    bool displayAllStudents();
+    bool displayStudentsByScore(BYTE score);
+    bool displayStudentsById(int studentId);
+    void printStudents(const vector<Student>& studentList);
 private:
-int clientSocket;
-sockaddr_in serverAddr;
+    int clientSocket;
+    sockaddr_in serverAddr;
 };
