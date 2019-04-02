@@ -6,12 +6,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
+#include <errno.h>
 #include "common.h"
 
 using namespace std; 
-extern int errno;
-
 
 int SocketHelper::printError(const char * errTitle) {
   char * pszErrorString = strerror(errno);
