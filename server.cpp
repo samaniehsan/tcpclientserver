@@ -26,7 +26,5 @@ int main(int argc, char *argv[]){
   unsigned short port = nPort;
   
   ServerChannel serverChannel(nPort);
-
-   
-  return 0;
+  return serverChannel.run();
 }
